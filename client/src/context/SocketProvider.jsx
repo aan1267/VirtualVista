@@ -10,7 +10,7 @@ import {io} from "socket.io-client"
   }
 
 const SocketProvider=() =>{
-  const socket=useMemo(()=>io("http://localhost:8080"),[])
+  const socket=useMemo(()=>io("http://localhost:3000"),[])
 
   
     return(
