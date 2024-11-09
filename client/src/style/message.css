@@ -1,22 +1,41 @@
 .chattingRoom{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between; 
     position:absolute;
-    top:50px;
+    top:40px;
     right:0;
     height:90vh;
-    overflow-y: auto;
     width:30vw;
     background-color:white;
     border-radius:10px;
     padding-inline:20px;
 }
 
-.chattingbox{
-    position:fixed;
-    bottom:10px;
+.messages{
+    flex-grow:1;
+    overflow-y: auto;
 }
 
-#chattingArea{
-    padding: 6px;
-    outline: none;
-    width:23rem;
+.chattingbox{
+    display:flex;
+    align-items: center;
+    gap:10px;
+    /* position:sticky; */
+    /* top:100%;
+    bottom:0; */
+    margin-top: auto; /* This ensures it stays at the bottom */
 }
+
+
+.chattingbox input{
+    flex-grow:1;
+    border-radius:5px;
+    padding:10px 15px;
+}
+
+.chattingbox button{
+    padding:10px 15px;
+}
+
+
