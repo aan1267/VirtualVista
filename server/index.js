@@ -32,9 +32,9 @@ io.on("connection" ,(socket)=>{
     io.to(room).emit("userjoined",{username,id:socket.id})
     io.to(socket.id).emit("roomjoined", data)
 
-    socket.on("chat-message",({room,message})=>{
-        console.log(`Message from ${socket.id} in room ${room}: ${message}`)
-         io.to(room).emit("chat-message",{id: socket.id,message})
+    socket.on("chat-message", ({room,message,username})=>{
+        // console.log("Chat message received:", { room, message, username });
+         io.to(room).emit("chat-message",{id:socket.id, message, username ,room})
     })
 
     socket.on('disconnect', () => {
@@ -62,8 +62,8 @@ socket.on("peernegodone",({to,ans})=>{
 
 })
 
-httpServer.listen(8080,()=>{
-    console.log("Server is running on port 8080")
+httpServer.listen(3000,()=>{
+    console.log("Server is running on port 3000")
 })
 
 
