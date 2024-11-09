@@ -1,0 +1,79 @@
+.meetVideoContainer {
+  position: realtive;
+  background-color: rgba(1, 4, 48);
+  color: white;
+  height: 100vh;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#email,
+#room {
+  padding: 8px;
+  outline: none;
+}
+
+.join-btn {
+  display: flex;
+  justify-content: center;
+}
+
+.join-btn button {
+  padding-inline: 20px;
+}
+
+.call-btn {
+  position: relative;
+  border: none;
+}
+
+.msg-btn,
+.mute-btn {
+  border: none;
+  color:white;
+}
+
+
+.video-btns {
+  width:100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  position:absolute;
+  bottom:0;
+}
+
+ .local-stream {
+    position: absolute;
+    width:50vw ;
+    height:50vh;
+    z-index: 2;
+    top: 30%;
+    left:15%;
+    transition: width 0.3s, height 0.3s; /* Smooth transition */
+}
+
+.remote-stream{
+    position:absolute;
+    width:fit-content;
+    height:50vh;
+    left:15%;
+    top:30%;
+    /* background-color: black; */
+    border-radius: 10px;
+}
+
+.local-stream.small {
+    position:absolute;
+    width:15vw; 
+    height:15vh; 
+    left:40%;
+    top:65.8%;
+    z-index: 3;
+}
+

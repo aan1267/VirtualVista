@@ -1,0 +1,22 @@
+.chattingRoom{
+    position:absolute;
+    top:50px;
+    right:0;
+    height:90vh;
+    overflow-y: auto;
+    width:30vw;
+    background-color:white;
+    border-radius:10px;
+    padding-inline:20px;
+}
+
+.chattingbox{
+    position:fixed;
+    bottom:10px;
+}
+
+#chattingArea{
+    padding: 6px;
+    outline: none;
+    width:23rem;
+}

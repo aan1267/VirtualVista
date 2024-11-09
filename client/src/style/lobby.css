@@ -1,0 +1,15 @@
+.Lobby{
+   position:absolute;
+   top:50%;
+   left:50%;
+   transform: translate(-50%,-50%);
+   border:1px solid grey;
+   border-radius:10px;
+   padding:90px;
+   width:300px;
+}
+
+h1{
+    text-align: center;
+}
+
