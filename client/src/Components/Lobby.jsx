@@ -11,7 +11,7 @@ function Lobby() {
 
   const navigate = useNavigate()
   const socket = useSocket()
-  const { setUsername, username,room, setRoom } = useUserContext() 
+  const { setUsername, username, room, setRoom } = useUserContext()
   const handleSubmitForm = useCallback(
     (e) => {
       e.preventDefault()
@@ -22,20 +22,20 @@ function Lobby() {
 
   const handleJoinRoom = useCallback(
     (data) => {
-      const { username, room } = data;
-      console.log(data);
-      console.log(username, room);
-      navigate(`/room/${room}`);
+      const { username, room } = data
+      console.log(data)
+      console.log(username, room)
+      navigate(`/room/${room}`)
     },
     [navigate]
-  )
+  );
 
   useEffect(() => {
-    socket.on("roomjoined", handleJoinRoom);
+    socket.on("roomjoined", handleJoinRoom)
     return () => {
-      socket.off("roomjoined", handleJoinRoom);
+      socket.off("roomjoined", handleJoinRoom)
     }
-  }, [socket, handleJoinRoom]);
+  }, [socket, handleJoinRoom])
   return (
     <div className="Lobby">
       <h1>Lobby</h1>
