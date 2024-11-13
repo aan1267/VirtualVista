@@ -20,7 +20,7 @@ function Room() {
   const [isAudioEnabled, setIsAudioEnabled] = useState(true)
 
   const socket = useSocket()
-  const peerRef=useRef(null)
+  const peerRef= useRef(null)
 
   const initializePeerConnection = () => {
      peerRef.current = peerService.createPeerConnection()
