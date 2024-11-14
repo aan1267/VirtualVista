@@ -12,7 +12,7 @@ function Message() {
 
     useEffect(()=>{
       const handleMessage = (msg) => {
-        console.log("Received message:", msg); 
+        console.log("Received message:", msg) 
         setMessages((prevMessages) => [...prevMessages, msg])
     }
 
@@ -26,9 +26,9 @@ function Message() {
 
     const handleSubmitForm = useCallback(
       (e) => {
-          e.preventDefault();
+          e.preventDefault()
           if(input){
-            socket.emit("chat-message", { username, message:input ,room})
+             socket.emit("chat-message", { username, message : input ,room})
             setInput("")
           }
       },
@@ -38,7 +38,7 @@ function Message() {
   return (
     <div className="chattingRoom">
       <h1>Chat</h1>
-      <p className={messages.length === 0 ? "nochat":""}></p>
+      {/* <p className={messages.length === 0 ? "nochat":""}></p> */}
        <div className="messages">
        {messages.map((msg, index) => (
                     <p key={index}>
