@@ -22,9 +22,12 @@ function Room() {
   const socket = useSocket()
   const peerRef= useRef(null)
 
+  const audioRef=useRef(null)
+  const remoteaudioRef=useRef(null)
+
   const initializePeerConnection = () => {
      peerRef.current = peerService.createPeerConnection()
-     console.log(peerRef.current)
+    //  console.log(peerRef.current)
      if(peerRef.current){
       peerRef.current.addEventListener("track", onTrack)
       peerRef.current.addEventListener("negotiationneeded", handleNegoNeeded)
@@ -33,11 +36,11 @@ function Room() {
 
   const requestPermissions = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({video: true,audio: true})
-        console.log(stream)
+        const stream = await navigator.mediaDevices.getUserMedia({video: true,audio:true})
+        // console.log(stream)
         setMyStream(stream)
-        setIsAudioEnabled(true)
         setIsVideoEnabled(true)
+        setIsAudioEnabled(true)
         return stream
       } catch (error) {
         console.error("Error accessing media devices", error)
@@ -58,7 +61,7 @@ function Room() {
     stream.getTracks().forEach(track => peerRef.current.addTrack(track, stream))
 
    const offer = await peerService.getOffer()
-    console.log("Created offer SDP:", offer.sdp)
+    // console.log("Created offer SDP:", offer.sdp)
     await peerRef.current.setLocalDescription(offer)
     socket.emit("usercall", { to: remoteSocketId, offer })
   }, [remoteSocketId, socket])
@@ -68,7 +71,6 @@ function Room() {
       const stream = await requestPermissions()
       
       stream.getTracks().forEach(track => peerRef.current.addTrack(track, stream));
-      
       const ans = await peerService.getAnswer(offer)
       socket.emit("callaccepted", { to: from, ans })
       setMyStream(stream)
@@ -77,15 +79,13 @@ function Room() {
   );
 
 
-
-  const handleCallAccepted = useCallback(async({ from, ans }) => {
+  const handleCallAccepted = useCallback(async({ from , ans }) => {
      await peerRef.current.setRemoteDescription(ans)
     console.log("Call Accepted")
     },[])
 
   const handleNegoNeeded = useCallback(async () => {
     const offer = await peerService.getOffer()
-    console.log(offer)
     socket.emit("peernegoneeded", { offer, to: remoteSocketId })
   }, [remoteSocketId, socket])
 
@@ -96,6 +96,10 @@ function Room() {
     },
     [socket]
   )
+
+  const handlenegofinal=useCallback(async({ ans })=>{
+      await peerRef.current.setRemoteDescription(ans)
+  },[])
   
 
   const handleCallEnd=useCallback(async()=>{
@@ -105,68 +109,72 @@ function Room() {
       }
 
       if (peerRef.current ) {
-        peerRef.current .close()
+        peerRef.current.close()
       }
   
       setMyStream(null)
       setRemoteStream(null)
       setRemoteSocketId(null)
-      setIsCallEnd(true)
   },[mystream])
 
+  
 
-
+  useEffect(() => {
+    if (mystream && audioRef.current) {
+      audioRef.current.srcObject = mystream
+      audioRef.current.muted=!isAudioEnabled
+      audioRef.current.play() 
+    }
+  }, [mystream,isAudioEnabled])
 
    useEffect(() => {
    if(peerRef.current){
     peerRef.current.addEventListener("negotiationneeded", handleNegoNeeded)
    }
-
-
-     return () => {
+    return () => {
         if(peerRef.current){
           peerRef.current.removeEventListener("negotiationneeded", handleNegoNeeded)}
         }
-     }, [handleNegoNeeded])
+    }, [handleNegoNeeded])
 
   const onTrack = useCallback((event) => {
     console.log("Got remote track:", event.track.kind)
       const remoteStream = event.streams[0]
-      console.log(event.streams[0])
+      // console.log(event.streams[0])
       setRemoteStream(remoteStream)
+
+      if(remoteaudioRef.current){
+         remoteaudioRef.current.srcObject=remoteStream
+         remoteaudioRef.current.play()
+      }
   }, [])
 
-
-  const toggleTrack=(track)=>{
-     track.enabled=!track.enabled
-  }
- 
-
-  const handleVideoToggle=async()=>{
-      if (mystream) {
-          const videoTracks = mystream.getVideoTracks()
-        
-         videoTracks.forEach((track)=>{
-            toggleTrack(track)
-
-            socket.emit("videoStatuschange",({
-              to:remoteSocketId,
-              videoEnabled:track.enabled
-            }))
-          })
-        setIsVideoEnabled((prev) => !prev);
-        }
-    }
-
+const handleVideoToggle=async()=>{
+      if (mystream ) {
+        const videoTracks = mystream.getVideoTracks()
     
-    const handleAudioToggle =()=>{
-       if(mystream){
-         const audioTracks=mystream.getAudioTracks()
+        videoTracks.forEach((track)=>{
+          track.enabled=!track.enabled
 
-         audioTracks.forEach(track => toggleTrack(track))
-         setIsAudioEnabled((prev) => !prev)
-       }
-    }
+          socket.emit("videoStatuschange",({
+            to:remoteSocketId,
+            videoEnabled:track.enabled
+          }))
+        })
+        setIsVideoEnabled((prev) => !prev)
+        }
+      }
+    
+   const handleAudioToggle=()=>{
+     if(mystream){
+       mystream.getAudioTracks().forEach(track=>{
+         track.enabled=!track.enabled
+         console.log(`Track ID: ${track.id}, Enabled: ${track.enabled}, Muted: ${track.muted}`);
+       })
+       setIsAudioEnabled(prev=>!prev)
+     }
+   }
+   
     
   useEffect(() => {
     initializePeerConnection()
@@ -180,7 +188,7 @@ function Room() {
     socket.on("incomingcall", handleIncomingCall)
     socket.on("callaccepted", handleCallAccepted)
     socket.on("peernegoneeded", handleNegoNeededIncoming)
-
+    socket.on("peernegodone",handlenegofinal)
    
     //cleanup
     return () => {
@@ -188,7 +196,7 @@ function Room() {
       socket.off("incomingcall", handleIncomingCall)
       socket.off("callaccepted", handleCallAccepted)
       socket.off("peernegoneeded", handleNegoNeededIncoming)
-      
+      socket.off("peernegodone",handlenegofinal)
     }
   }, [
     socket,
@@ -209,18 +217,19 @@ function Room() {
         <button onClick={handleCallUser}>Call</button>
         {mystream && (
           <div>
-            {/* <h2>My Stream</h2> */}
+            {/* mystream */}
             <video
+              playsInline
               autoPlay
               ref={(video)=>{
-                 if(video)
-                  video.srcObject= mystream
-                 }}
+                 if(video) video.srcObject=mystream
+              }}
               className={`local-stream ${remotestream  ? "small" :""}`}
             />
           </div>
         )}
         <div className="video-btns">
+        <audio ref={audioRef} autoPlay  muted={isAudioEnabled ? false : true}/>
           { 
             <IconButton onClick={handleVideoToggle} className="call-btn">
               {isVideoEnabled ? <VideocamIcon style={{ fontSize: "35px", color: "white" }} />:<VideocamOffIcon style={{ fontSize: "35px", color: "white" }}/>}
@@ -244,8 +253,9 @@ function Room() {
         </div>
         { remotestream && (
           <>
-            {/* <h1>remotestream</h1> */}
-            <video
+           {/* remotestream */}
+           <video 
+             playsInline
              autoPlay
              ref={(video)=>{
               if(video)
@@ -253,6 +263,7 @@ function Room() {
              }}
               className="remote-stream"
              /> 
+             <audio ref={remoteaudioRef} autoPlay/>
           </>
         )}
       </div>
