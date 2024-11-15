@@ -24,7 +24,7 @@ io.on("connection" ,(socket)=>{
     //  console.log(`User Connected:${socket.id}`)
      socket.on("roomjoined",(data)=>{
      const {username,room}=data
-     console.log(username,room)
+    //  console.log(username,room)
      usernameToSocketId[username]=socket.id
      socketIdToUsername[socket.id]=username
     //join room
@@ -33,7 +33,7 @@ io.on("connection" ,(socket)=>{
     io.to(socket.id).emit("roomjoined", data)
 
     socket.on("chat-message", ({room,message,username})=>{
-        // console.log("Chat message received:", { room, message, username });
+        // console.log("Chat message received:", { room, message, username })
          io.to(room).emit("chat-message",{id:socket.id, message, username ,room})
     })
 
@@ -56,7 +56,8 @@ socket.on("peernegoneeded",({to ,offer})=>{
     io.to(to).emit("peernegoneeded",{from:socket.id,offer})
   })
 
-socket.on("peernegodone",({to,ans})=>{
+socket.on("peernegodone",({to,ans})=>{done
+    console.log("peernego",ans)
     io.to(to).emit("peernegofinal",{from:socket.id,ans})
 })
 
