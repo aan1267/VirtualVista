@@ -23,7 +23,7 @@ function Lobby() {
   const handleJoinRoom = useCallback(
     (data) => {
       const { username, room } = data
-      console.log(data)
+      // console.log(data)
       console.log(username, room)
       navigate(`/room/${room}`)
     },
