@@ -4,15 +4,15 @@
   <strong>VirtualVista offers direct peer-to-peer video connections with instant messaging!</strong>
 </p>
 _______
-<div style="display: flex; justify-content: center; gap: 15px;">
-  <img src="assets/LandingPage.png" width:"300"/>
+<div style="display: flex; justify-content: center; gap: 10;">
+  <img src="assets/LandingPage.png" width:"200"/>
   <img src="assets/Lobby.png"  width="500" />
 </div>
  <img src="assets/Room.png"/>
 <img src="assets/CallAccept.png"  />
 
 ## Features
--**Real-time Video Calls**: Users can connect for one-on-one video calls
+- **Real-time Video Calls**: Users can connect for one-on-one video calls
 - **Text Chat**: Send messages during the video call.
 - **Call Controls**:<br/>
    &nbsp;&nbsp;&#8226; **Connect/Disconnect**: Start and end calls with a simple click.<br/>
