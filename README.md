@@ -1,10 +1,10 @@
-<h1 style="text-align:center;">VirtualVista 📞</h1>
+<h1 align="center">VirtualVista 📞</h1>
 ***
 
-<p style="text-align:center;">
+<p align="center">
   <strong>VirtualVista offers direct peer-to-peer video connections with instant messaging!</strong>
 </p>
-<img src="assets/LandingPage.png"  width="300" />
+<img src="assets/LandingPage.png"  width="300" height="700"/>
 <img src="assets/Lobby.png"  width="300" />
 
 
