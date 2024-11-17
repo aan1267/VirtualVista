@@ -5,7 +5,7 @@
 </p>
 _______
  <img src="assets/LandingPage.png" />
-<div style="display: flex; justify-content: center; gap: 10;">
+<div style="display: flex; justify-content: center; gap: 10px;">
    <img src="assets/Room.png" width:"400"/>
   <img src="assets/Lobby.png"  width="100" />
 </div>
