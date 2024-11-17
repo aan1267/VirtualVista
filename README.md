@@ -6,8 +6,8 @@
 _______
  <img src="assets/LandingPage.png" />
 <div style="display: flex; justify-content: center; gap: 10;">
-   <img src="assets/Room.png" width:"500"/>
-  <img src="assets/Lobby.png"  width="300" />
+   <img src="assets/Room.png" width:"400"/>
+  <img src="assets/Lobby.png"  width="100" />
 </div>
 <img src="assets/CallAccept.png"  />
 
