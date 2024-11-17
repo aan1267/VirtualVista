@@ -1,23 +1,25 @@
 <h1 align="center">VirtualVista 📞</h1>
-***
 
 <p align="center">
   <strong>VirtualVista offers direct peer-to-peer video connections with instant messaging!</strong>
 </p>
-<img src="assets/LandingPage.png" />
-<img src="assets/Lobby.png"  width="500" />
-
+_______
+ <img src="assets/LandingPage.png" />
+<div style="display: flex; justify-content: center; gap: 10;">
+  <img src="assets/Lobby.png"  width="500" />
+   <img src="assets/Room.png" width:"200"/>
+</div>
+<img src="assets/CallAccept.png"  />
 
 ## Features
-- Real-time Video Calls: Users can connect for one-on-one video calls
-- Text Chat: Send messages during the video call.
-- Call Controls:
-   U+25CB Connect/Disconnect: Start and end calls with a simple click.
-   U+25CB Mute/Unmute Audio: Mute or unmute your microphone during a call.
-   U+25CB Video On/Off: Turn your camera on or off during the call.
+- **Real-time Video Calls**: Users can connect for one-on-one video calls
+- **Text Chat**: Send messages during the video call.
+- **Call Controls**:<br/>
+   &nbsp;&nbsp;&#8226; **Connect/Disconnect**: Start and end calls with a simple click.<br/>
+   &nbsp;&nbsp;&#8226; **Mute/Unmute Audio**: Mute or unmute your microphone during a call.<br/>
+   &nbsp;&nbsp;&#8226; **Video On/Off**: Turn your camera on or off during the call.
 - Responsive design for desktop and mobile.
 
-_____
 
 ## Technologies
 - **Frontend**: HTML, CSS, JavaScript, React, Material-UI
