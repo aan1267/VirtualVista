@@ -7,7 +7,7 @@ _______
 <p align="center">
   <p>
     <img src="./assets/LandingPage.png" width="400px">
-    <img src="./assets/Lobby.png" width="400px">
+    <img src="./assets/Lobby.png" width="300px">
   </p>
   <p>
     <img src="./assets/Room.png" width="400px">
