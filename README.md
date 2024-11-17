@@ -5,8 +5,10 @@
 </p>
 _______
 <img src="assets/LandingPage.png" />
-<img src="assets/Lobby.png"  width="300" />
-<img src="assets/Room.png"   width="500"/>
+<div style="display: flex; justify-content: center; gap: 10px;">
+  <img src="assets/Lobby.png"  width="300" />
+  <img src="assets/Room.png"   width="500"/>
+</div>
 <img src="assets/CallAccept.png"  />
 
 ## Features
