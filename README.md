@@ -7,17 +7,17 @@ _______
 <img src="assets/LandingPage.png" />
 <div style="display: flex; justify-content: center; gap: 15px;">
   <img src="assets/Lobby.png"  width="500" />
-  <img src="assets/Room.png"   width="500"/>
+  <img src="assets/Room.png"   width="500" height:"500"/>
 </div>
 <img src="assets/CallAccept.png"  />
 
 ## Features
 - Real-time Video Calls: Users can connect for one-on-one video calls
 - Text Chat: Send messages during the video call.
-- Call Controls:
-   &#8226; Connect/Disconnect: Start and end calls with a simple click.
-   &#8226; Mute/Unmute Audio: Mute or unmute your microphone during a call.
-   &#8226; Video On/Off: Turn your camera on or off during the call.
+- Call Controls:<br/>
+   &nbsp;&nbsp;&#8226; Connect/Disconnect: Start and end calls with a simple click.<br/>
+   &nbsp;&nbsp;&#8226; Mute/Unmute Audio: Mute or unmute your microphone during a call.<br/>
+   &nbsp;&nbsp;&#8226; Video On/Off: Turn your camera on or off during the call.
 - Responsive design for desktop and mobile.
 
 
