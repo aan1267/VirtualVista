@@ -76,7 +76,7 @@ body{
    display: none;
  }
 
- .landingPageContainer nav .navList{
+ /* .landingPageContainer nav .navList{
   display:flex;
   align-items: center;
   gap:1.6rem;
@@ -94,7 +94,7 @@ body{
  width: 30%;
  z-index:1;
  transition: top 0.3s ease-in-out; 
- }
+ } */
 
  
 
@@ -103,7 +103,7 @@ body{
  
 
 
-   @media (min-width:1025px)and (max-width:1290px){
+   @media (min-width:1025px)and (max-width:2000px){
   .landingMainContainer .right-side img{
         max-height:60vh;
         margin-top:20%;
@@ -207,5 +207,8 @@ body{
       }
       .left-side .btn-start{
         margin-top:1px;
+      }
+      .navList{
+        display:none
       }
  }
