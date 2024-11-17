@@ -56,8 +56,8 @@ socket.on("peernegoneeded",({to ,offer})=>{
     io.to(to).emit("peernegoneeded",{from:socket.id,offer})
   })
 
-socket.on("peernegodone",({to,ans})=>{done
-    console.log("peernego",ans)
+socket.on("peernegodone",({to,ans})=>{
+    // console.log("peernego",ans)
     io.to(to).emit("peernegofinal",{from:socket.id,ans})
 })
 
