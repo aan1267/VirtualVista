@@ -1,12 +1,13 @@
 <h1 align="center">VirtualVista 📞</h1>
-***
+_____
 
 <p align="center">
   <strong>VirtualVista offers direct peer-to-peer video connections with instant messaging!</strong>
 </p>
 <img src="assets/LandingPage.png" />
-<img src="assets/Lobby.png"  width="500" />
-
+<img src="assets/Lobby.png"  width="300" />
+<img src="assets/Room.png"   width="500"/>
+<img src="assests/CallAccept.png"  />
 
 ## Features
 - Real-time Video Calls: Users can connect for one-on-one video calls
