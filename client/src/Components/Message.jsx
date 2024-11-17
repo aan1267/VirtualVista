@@ -4,7 +4,7 @@ import Button from "@mui/material/Button"
 import { useSocket } from "../context/SocketProvider"
 import { useUserContext } from '../context/UserProvider'
 
-function Message() {
+function Message({isopen}) {
     const [messages,setMessages]=useState([])
     const [input,setInput]=useState("")
     const socket=useSocket()
@@ -36,9 +36,8 @@ function Message() {
   )
 
   return (
-    <div className="chattingRoom">
+    <div className={`chattingRoom ${isopen ?'active':""}`}>
       <h1>Chat</h1>
-      {/* <p className={messages.length === 0 ? "nochat":""}></p> */}
        <div className="messages">
        {messages.map((msg, index) => (
                     <p key={index}>

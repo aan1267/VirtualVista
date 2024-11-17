@@ -37,6 +37,11 @@ form {
   color:white;
 }
 
+.call-btn{
+  background-color: #388e3c;
+  padding:10px 40px;
+  color:white;
+}
 
 .video-btns {
   width:100%;
@@ -60,20 +65,39 @@ form {
 
 .remote-stream{
     position:absolute;
-    width:fit-content;
+    /* width:fit-content; */
     height:50vh;
     left:15%;
     top:30%;
-    /* background-color: black; */
     border-radius: 10px;
 }
 
 .local-stream.small {
     position:absolute;
-    width:15vw; 
+    max-width:30vw; 
     height:15vh; 
     left:40%;
     top:65.8%;
-    z-index: 3;
+    z-index:2;
+}
+ 
+
+@media screen and (max-width:1023px){
+  .remote-stream{
+    margin-top:30px;
+    position:absolute;
+    max-width:80vw;
+    height:40vh;
+    left:15%;
+    top:20%;
+    border-radius: 10px;
+  }
+  .local-stream.small {
+    position:absolute;
+    height:50vh; 
+    width:80vw;
+    left:60%;
+    top:40%; 
+   }
 }
 

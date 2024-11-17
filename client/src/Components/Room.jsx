@@ -18,12 +18,18 @@ function Room() {
   const [remotestream, setRemoteStream] = useState()
   const [isVideoEnabled, setIsVideoEnabled] = useState(true)
   const [isAudioEnabled, setIsAudioEnabled] = useState(true)
+  const [isopen,setIsOpen]=useState(true)
 
   const socket = useSocket()
   const peerRef= useRef(null)
 
   const audioRef=useRef(null)
   const remoteaudioRef=useRef(null)
+
+  const handleToggle = (e)=>{
+       e.stopPropagation()
+       setIsOpen(!isopen)
+  }
 
   const initializePeerConnection = () => {
      peerRef.current = peerService.createPeerConnection()
@@ -214,7 +220,7 @@ const handleVideoToggle=async()=>{
       <div className="meetVideoContainer">
         <h1>Room</h1>
         <h4>{remoteSocketId ?  "connected" : "No one in room"}</h4>
-        <button onClick={handleCallUser}>Call</button>
+        <button className="call-btn" onClick={handleCallUser}>Call</button>
         {mystream && (
           <div>
             {/* mystream */}
@@ -241,7 +247,7 @@ const handleVideoToggle=async()=>{
             </IconButton>
           }
           { 
-            <IconButton className="msg-btn">
+            <IconButton className="msg-btn" onClick={handleToggle}>
               <MessageIcon style={{ fontSize: "35px", color: "white" }} />
             </IconButton>
           }
@@ -267,7 +273,7 @@ const handleVideoToggle=async()=>{
           </>
         )}
       </div>
-      <Message/>
+      <Message onClick={handleToggle} isopen={isopen}/>
     </>
   )
 }

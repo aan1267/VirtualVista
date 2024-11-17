@@ -38,8 +38,9 @@ function Lobby() {
   }, [socket, handleJoinRoom])
   return (
     <div className="Lobby">
-      <h1>Lobby</h1>
       <form onSubmit={handleSubmitForm}>
+      <h1>Lobby</h1>
+        <div className="input-group">
         <label htmlFor="username">Username</label>
         <input
           type="text"
@@ -48,16 +49,19 @@ function Lobby() {
           onChange={(e) => setUsername(e.target.value)}
           value={username}
         />
-        <br />
-        <label htmlFor="room">Room Number</label>
+        </div>
+      
+        <div className="input-group">
+        <label htmlFor="roomno">Room Number</label>
         <input
           type="text"
           placeholder="enter room number"
-          id="room"
+          id="roomno"
           onChange={(e) => setRoom(e.target.value)}
           value={room}
         />
-        <br />
+        </div>
+        
         <div className="join-btn">
           <Button type="submit" variant="contained">
             Join
