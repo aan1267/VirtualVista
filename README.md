@@ -11,7 +11,7 @@ _______
   </p>
   <p>
     <img src="./assets/Room.png" width="400px">
-    <img src="./assets/Room.png" width="400px">
+    <img src="./assets/CallAccept.png" width="400px">
   </p>
 </p>
 
