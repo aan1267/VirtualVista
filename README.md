@@ -3,7 +3,7 @@
 <p align="center">
   <strong>VirtualVista offers direct peer-to-peer video connections with instant messaging!</strong>
 </p>
-*****
+-----
 <p align="center">
   <p>
     <img src="./assets/LandingPage.png" width="400px">
