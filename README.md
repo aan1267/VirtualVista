@@ -4,11 +4,11 @@
   <strong>VirtualVista offers direct peer-to-peer video connections with instant messaging!</strong>
 </p>
 _______
+ <img src="assets/LandingPage.png" />
 <div style="display: flex; justify-content: center; gap: 10;">
-  <img src="assets/LandingPage.png" width:"200"/>
   <img src="assets/Lobby.png"  width="500" />
+   <img src="assets/Room.png" width:"200"/>
 </div>
- <img src="assets/Room.png"/>
 <img src="assets/CallAccept.png"  />
 
 ## Features
