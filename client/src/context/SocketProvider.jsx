@@ -2,7 +2,8 @@ import React, { createContext,useContext,useMemo } from 'react'
 import { Outlet } from 'react-router-dom'
 import {io} from "socket.io-client"
 
- const serverurl=import.meta.env.Server_Url
+const isProduction = process.env.NODE_ENV === 'production';
+ const serverurl= isProduction ? import.meta.env.SERVER_URL_PRO : "http://localhost:3000"
  const SocketContext=createContext(null)
  
  export const useSocket=()=>{
