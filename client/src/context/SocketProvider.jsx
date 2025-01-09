@@ -13,7 +13,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 const SocketProvider=() =>{
   //connection create
-  const socket=useMemo(()=>io(`${serverurl}`),[])
+  const socket=useMemo(()=>io(serverurl),[serverurl])
 
   
     return(
