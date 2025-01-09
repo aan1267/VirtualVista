@@ -64,7 +64,7 @@ socket.on("peernegodone",({to,ans})=>{
 
 })
 
-httpServer.listen(port,'0.0.0.0',()=>{
+httpServer.listen(port,()=>{
     console.log(`Server is running on port ${port}`)
 })
 
