@@ -1,7 +1,22 @@
 {
-  "dependencies": {
+  "name": "backend-app",             
+  "version": "1.0.0",                 
+  "main": "index.js",                 
+  "scripts":{
+    "start": "node index.js",          
+    "dev": "nodemon index.js",         
+    "lint": "eslint ."
+  },
+  "author": "Aanchal Sharma",
+  "license": "ISC",
+  "description": "",
+    "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.1",
     "socket.io": "^4.8.1"
   }
 }
+
+
+
+
