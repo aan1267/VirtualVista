@@ -2,7 +2,7 @@ const express=require("express")
 const {Server}=require("socket.io")
 const http=require("http")
 const cors=require("cors")
-const port= process.env.PORT || 3000
+const port= process.env.PORT
 
 const app=express()
 app.use(cors({ origin: '*'}))
@@ -64,7 +64,7 @@ socket.on("peernegodone",({to,ans})=>{
 
 })
 
-httpServer.listen(port,()=>{
+httpServer.listen(port,'0.0.0.0',()=>{
     console.log(`Server is running on port ${port}`)
 })
 
