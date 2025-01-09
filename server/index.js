@@ -1,10 +1,12 @@
 const express=require("express")
+const app = express()
+const port = process.env.PORT || 3000
 const {Server}=require("socket.io")
 const http=require("http")
 const cors=require("cors")
-const port= process.env.PORT
 
-const app=express()
+
+
 app.use(cors({ origin: '*'}))
 
 const httpServer=http.createServer(app)
