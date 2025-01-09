@@ -1,13 +1,21 @@
 const express=require("express")
 const app = express()
-const port = process.env.PORT || 3000
 const {Server}=require("socket.io")
 const http=require("http")
 const cors=require("cors")
 
+const port = process.env.PORT || 3000
 
+const allowedOrigin = process.env.NODE_ENV === 'production' 
+   ? [process.env.FRONTEND_URL_PROD]
+  : [process.env.FRONTEND_URL_DEV]
 
-app.use(cors({ origin: '*'}))
+const corsOptions={
+  origin:allowedOrigin, 
+credentials: true,  
+}
+//middleware
+app.use(cors(corsOptions))
 
 const httpServer=http.createServer(app)
 
