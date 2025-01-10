@@ -30,19 +30,18 @@ const PeerService=()=>{
     }
 
 
-    const setLocalDescription=async(ans)=>{
-        if(peer){
-            await peer.setLocalDescription(new RTCSessionDescription(ans))
-        }
-    }
+    // const setLocalDescription=async(ans)=>{
+    //     if(peer){
+    //         await peer.setLocalDescription(new RTCSessionDescription(ans))
+    //     }
+    // }
 
     return {
         createPeerConnection,
         getOffer,
         getAnswer,
-        setLocalDescription
     }
 
 }
 
-export  default  PeerService
+export  default  PeerService()
