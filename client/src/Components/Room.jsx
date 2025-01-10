@@ -62,20 +62,23 @@ function Room() {
   const handleCallUser = useCallback(async () => {
     const stream = await requestPermissions()
     setMyStream(stream)
-
+    if (!peerRef.current) {
+      initializePeerConnection();
+    }
     // Add tracks to the peer connection
     stream.getTracks().forEach(track => peerRef.current.addTrack(track, stream))
 
    const offer = await peerService.getOffer()
     // console.log("Created offer SDP:", offer.sdp)
-    await peerRef.current.setLocalDescription(offer)
     socket.emit("usercall", { to: remoteSocketId, offer })
   }, [remoteSocketId, socket])
 
   const handleIncomingCall = useCallback( async ({ from, offer }) => {
       setRemoteSocketId(from)
       const stream = await requestPermissions()
-      
+      if (!peerRef.current) {
+        initializePeerConnection();
+      }
       stream.getTracks().forEach(track => peerRef.current.addTrack(track, stream));
       const ans = await peerService.getAnswer(offer)
       socket.emit("callaccepted", { to: from, ans })
@@ -91,8 +94,10 @@ function Room() {
     },[])
 
   const handleNegoNeeded = useCallback(async () => {
+    if (peerRef.current.signalingState === "stable") {
     const offer = await peerService.getOffer()
     socket.emit("peernegoneeded", { offer, to: remoteSocketId })
+    }
   }, [remoteSocketId, socket])
 
   const handleNegoNeededIncoming = useCallback(
@@ -149,14 +154,14 @@ function Room() {
       console.log("Received remote stream:", remoteStream);
       // console.log(event.streams[0])
       setRemoteStream(remoteStream)
-      // if (remoteVideoElement && remoteStream) {
-      //   remoteVideoElement.srcObject = remoteStream; 
-      //   remoteVideoElement.play();
-      // }
-     if(remoteaudioRef.current){
-         remoteaudioRef.current.srcObject=remoteStream
-         remoteaudioRef.current.play()
-      }
+      remoteStream.getTracks().forEach(track => {
+        if (track.kind === "audio") {
+          if (remoteaudioRef.current) {
+            remoteaudioRef.current.srcObject = remoteStream;
+            remoteaudioRef.current.play();
+          }
+        }
+      });
   }, [])
 
 const handleVideoToggle=async()=>{
