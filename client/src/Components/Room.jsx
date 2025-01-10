@@ -149,7 +149,6 @@ function Room() {
       console.log("Received remote stream:", remoteStream);
       // console.log(event.streams[0])
       setRemoteStream(remoteStream)
-      remoteStream.play();
       // if (remoteVideoElement && remoteStream) {
       //   remoteVideoElement.srcObject = remoteStream; 
       //   remoteVideoElement.play();
