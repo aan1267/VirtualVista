@@ -1,5 +1,6 @@
 const express=require("express")
 const app = express()
+require('dotenv').config();
 const {Server}=require("socket.io")
 const http=require("http")
 const cors=require("cors")
@@ -10,7 +11,7 @@ const allowedOrigin = process.env.NODE_ENV === 'production'
   : [process.env.FRONTEND_URL_DEV]
 
 const corsOptions={
-  origin:allowedOrigin, 
+origin:allowedOrigin, 
 credentials: true,  
 }
 //middleware
