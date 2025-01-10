@@ -22,6 +22,7 @@
     align-items: center;
     gap:10px;
     margin-top:auto;
+    position:relative
 }
 
 
@@ -38,14 +39,10 @@
 
 
 @media (min-width:1024px)and(max-width:1290px){
-    .chattingRoom{
+    /* .chattingRoom{
         display:block;
-    }  
-    .chattingRoom.active{
-        display:flex;
-        flex-direction: column;
-        justify-content: space-between; 
-        position:absolute;
+    }   */
+    /* .chattingRoom.active{
         top:40px;
         right:0;
         height:90vh;
@@ -53,7 +50,7 @@
         background-color:white;
         border-radius:10px;
         padding-inline:20px;
-    }
+    } */
 }
 
 @media (max-width:768px){
