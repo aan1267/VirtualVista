@@ -36,7 +36,9 @@ function Message({isopen}) {
   )
 
   return (
-    <div className={`chattingRoom ${isopen ?'active':""}`}>
+   <>
+     {isopen && (
+      <div className={`chattingRoom ${isopen ?'active':""}`}>
       <h1>Chat</h1>
        <div className="messages">
        {messages.map((msg, index) => (
@@ -52,6 +54,8 @@ function Message({isopen}) {
         </div>
       </form>
     </div>
+    )}
+   </>
   )
 }
 
