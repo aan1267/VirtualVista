@@ -45,4 +45,4 @@ const PeerService=()=>{
 
 }
 
-export  default  PeerService()
+export  default  PeerService
