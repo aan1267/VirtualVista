@@ -1,4 +1,4 @@
-.chattingRoom.active{
+.chattingRoom{
     display:flex;
     flex-direction: column;
     justify-content: space-between; 
@@ -42,7 +42,7 @@
     /* .chattingRoom{
         display:block;
     }   */
-    /* .chattingRoom.active{
+    /* .chattingRoom{
         top:40px;
         right:0;
         height:90vh;
@@ -54,7 +54,7 @@
 }
 
 @media (max-width:768px){
-    .chattingRoom.active{
+    .chattingRoom{
         display:flex;
         flex-direction: column;
         justify-content: space-between; 
