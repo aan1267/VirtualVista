@@ -62,9 +62,6 @@ function Room() {
   const handleCallUser = useCallback(async () => {
     const stream = await requestPermissions()
     setMyStream(stream)
-    if (!peerRef.current) {
-      initializePeerConnection();
-    }
     // Add tracks to the peer connection
     stream.getTracks().forEach(track => peerRef.current.addTrack(track, stream))
 
@@ -171,10 +168,16 @@ const handleVideoToggle=async()=>{
         videoTracks.forEach((track)=>{
           track.enabled=!track.enabled
 
-          socket.emit("videoStatuschange",({
-            to:remoteSocketId,
-            videoEnabled:track.enabled
-          }))
+          // socket.emit("videoStatuschange",({
+          //   to:remoteSocketId,
+          //   videoEnabled:track.enabled
+          // }))
+          if (track.enabled) {
+            peerRef.current.addTrack(track, mystream);
+          } else {
+            peerRef.current.removeTrack(track);
+          }
+    
         })
         setIsVideoEnabled((prev) => !prev)
         }
