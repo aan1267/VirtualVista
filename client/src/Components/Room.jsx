@@ -285,7 +285,7 @@ const handleVideoToggle=async()=>{
           </>
         )}
       </div>
-      <Message onClick={()=>handleToggle} isopen={isopen}/>
+      <Message onClick={(e)=>handleToggle(e)} isopen={isopen}/>
     </>
   )
 }
