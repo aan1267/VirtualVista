@@ -18,7 +18,7 @@ function Room() {
   const [remotestream, setRemoteStream] = useState()
   const [isVideoEnabled, setIsVideoEnabled] = useState(true)
   const [isAudioEnabled, setIsAudioEnabled] = useState(true)
-  const [isopen,setIsOpen]=useState(true)
+  const [isopen,setIsOpen]=useState(false)
 
   const socket = useSocket()
   const peerRef= useRef(null)
@@ -285,7 +285,7 @@ const handleVideoToggle=async()=>{
           </>
         )}
       </div>
-      <Message onClick={handleToggle} isopen={isopen}/>
+      <Message onClick={()=>handleToggle} isopen={isopen}/>
     </>
   )
 }
