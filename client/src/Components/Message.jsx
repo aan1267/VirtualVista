@@ -38,7 +38,7 @@ function Message({isopen}) {
   return (
    <>
      {isopen && (
-      <div className={`chattingRoom ${isopen ?'active':""}`}>
+      <div className="chattingRoom">
       <h1>Chat</h1>
        <div className="messages">
        {messages.map((msg, index) => (
