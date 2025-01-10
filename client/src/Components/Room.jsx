@@ -146,10 +146,15 @@ function Room() {
   const onTrack = useCallback((event) => {
     console.log("Got remote track:", event.track.kind)
       const remoteStream = event.streams[0]
+      console.log("Received remote stream:", remoteStream);
       // console.log(event.streams[0])
       setRemoteStream(remoteStream)
-
-      if(remoteaudioRef.current){
+      remoteStream.play();
+      // if (remoteVideoElement && remoteStream) {
+      //   remoteVideoElement.srcObject = remoteStream; 
+      //   remoteVideoElement.play();
+      // }
+     if(remoteaudioRef.current){
          remoteaudioRef.current.srcObject=remoteStream
          remoteaudioRef.current.play()
       }
