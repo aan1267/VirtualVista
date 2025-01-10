@@ -32,7 +32,7 @@ const PeerService=()=>{
 
     const setLocalDescription=async(ans)=>{
         if(peer){
-            await peer.setRemoteDescription(new RTCSessionDescription(ans))
+            await peer.setLocalDescription(new RTCSessionDescription(ans))
         }
     }
 
