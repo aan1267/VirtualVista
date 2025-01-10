@@ -13,7 +13,13 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 const SocketProvider=() =>{
   //connection create
-  const socket=useMemo(()=>io(serverurl),[])
+  const socket=useMemo(()=>io(serverurl),{
+    transports: ["websocket"], 
+    pingInterval: 25000,      
+    pingTimeout: 20000,       
+    reconnectionAttempts: 5,   
+    maxPayload: 1000000,      
+  },[serverurl])
 
   
     return(
