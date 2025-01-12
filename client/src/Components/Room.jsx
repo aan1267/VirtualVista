@@ -140,16 +140,15 @@ function Room() {
 
     setRemoteStream(null);
     setRemoteSocketId(null);
-  
-    setTimeout(()=>{
-        window.location.href="/lobby"
-    },5000)
     toast.error("Opponent has disconnected. The call has ended.", {
       position: "top-center",       
       hideProgressBar: true, 
       closeOnClick: true,  
       pauseOnHover: true,  
     });
+    setTimeout(()=>{
+      window.location.href="/lobby"
+    },5000)
 },[remotestream])
 
   
@@ -241,7 +240,7 @@ const handleVideoToggle=async()=>{
       socket.off("callaccepted", handleCallAccepted)
       socket.off("peernegoneeded", handleNegoNeededIncoming)
       socket.off("peernegodone",handlenegofinal)
-      socket.off("call-ended")
+      socket.off("call-ended",handlecallendremote)
       socket.off("chat-message",handleUpdateBadge)
     }
   }, [
@@ -250,6 +249,7 @@ const handleVideoToggle=async()=>{
     handleCallUser,
     handleCallAccepted,
     handleNegoNeeded,
+    handlecallendremote,
   ])
 
 
