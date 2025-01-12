@@ -43,17 +43,19 @@ io.on("connection" ,(socket)=>{
     io.to(room).emit("userjoined",{username,id:socket.id})
     io.to(socket.id).emit("roomjoined", data)
 
-    socket.on("chat-message", ({room,message,username})=>{
+    socket.on("chat-message", ({room,message,username,id})=>{
         // console.log("Chat message received:", { room, message, username })
          io.to(room).emit("chat-message",{id:socket.id, message, username ,room})
     })
 
     socket.on('disconnect', () => {
-        console.log('A user disconnected:', socket.id);
+      console.log('A user disconnected:', socket.id);
       })
-    })
+  
 
-
+socket.on("call-ended",(remoteSocketId)=>{
+  io.to(remoteSocketId).emit("call-ended",socket.id)
+})
 
 socket.on("usercall", ({ to, offer }) => {
     io.to(to).emit("incomingcall", { from : socket.id, offer });
@@ -72,6 +74,7 @@ socket.on("peernegodone",({to,ans})=>{
     io.to(to).emit("peernegofinal",{from:socket.id,ans})
 })
 
+  })
 })
 
 httpServer.listen(port,'0.0.0.0',()=>{
