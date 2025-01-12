@@ -82,7 +82,7 @@ form {
 }
  
 
-@media screen and (max-width:1220px){
+/* @media screen and (max-width:1220px){
   .remote-stream{
     margin-top:30px;
     max-width:80vw;
@@ -97,5 +97,5 @@ form {
     left:60%;
     top:50%; 
    }
-}
+} */
 
