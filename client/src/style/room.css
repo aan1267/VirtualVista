@@ -85,6 +85,7 @@ form {
  @media screen and (max-width:1220px){
   .remote-stream{
     margin-top:30px;
+    max-width:100%;
     width:100vw;
     height:40vh;
     left:15%;
@@ -109,8 +110,8 @@ form {
 .local-stream.small {
   position:absolute;
   height:40vh; 
-  width:90vw;
+  width:60vw;
   left:50%;
-  top:80%; 
+  top:60%; 
  }
 }
