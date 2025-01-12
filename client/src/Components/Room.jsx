@@ -10,6 +10,8 @@ import "../style/room.css"
 import { useSocket } from "../context/SocketProvider"
 import peerService from "../service/peer"
 import Message from "./Message"
+import { ToastContainer, toast } from 'react-toastify';
+import Badge from '@mui/material/Badge';
 
 
 function Room() {
@@ -19,6 +21,8 @@ function Room() {
   const [isVideoEnabled, setIsVideoEnabled] = useState(true)
   const [isAudioEnabled, setIsAudioEnabled] = useState(true)
   const [isopen,setIsOpen]=useState(false)
+  const [msgcount,setMsgCount]=useState(0)
+ 
 
   const socket = useSocket()
   const peerRef= useRef(null)
@@ -63,8 +67,7 @@ function Room() {
     const stream = await requestPermissions()
     setMyStream(stream)
     // Add tracks to the peer connection
-    stream.getTracks().forEach(track => peerRef.current.addTrack(track, stream))
-
+    stream.getTracks().forEach(track => peerRef.current.addTrack(track, stream));
    const offer = await peerService.getOffer()
     // console.log("Created offer SDP:", offer.sdp)
     socket.emit("usercall", { to: remoteSocketId, offer })
@@ -76,7 +79,7 @@ function Room() {
       if (!peerRef.current) {
         initializePeerConnection();
       }
-      stream.getTracks().forEach(track => peerRef.current.addTrack(track, stream));
+       stream.getTracks().forEach(track => peerRef.current.addTrack(track, stream));
       const ans = await peerService.getAnswer(offer)
       socket.emit("callaccepted", { to: from, ans })
       setMyStream(stream)
@@ -116,6 +119,8 @@ function Room() {
         window.location.href="/"
       }
 
+      socket.emit("call-ended",remoteSocketId)
+
       if (peerRef.current ) {
         peerRef.current.close()
       }
@@ -123,15 +128,37 @@ function Room() {
       setMyStream(null)
       setRemoteStream(null)
       setRemoteSocketId(null)
-  },[mystream])
+  },[mystream,remoteSocketId])
+
+  const handlecallendremote=useCallback(()=>{
+    if(remotestream){
+      remotestream.getTracks().forEach((track) => track.stop())
+    }
+    if (peerRef.current ) {
+      peerRef.current.close()
+    }
+
+    setRemoteStream(null);
+    setRemoteSocketId(null);
+  
+    setTimeout(()=>{
+        window.location.href="/lobby"
+    },5000)
+    toast.error("Opponent has disconnected. The call has ended.", {
+      position: "top-center",       
+      hideProgressBar: true, 
+      closeOnClick: true,  
+      pauseOnHover: true,  
+    });
+},[remotestream])
 
   
 
   useEffect(() => {
     if (mystream && audioRef.current) {
-      audioRef.current.srcObject = mystream
-      audioRef.current.muted=!isAudioEnabled
-      audioRef.current.play() 
+        audioRef.current.srcObject = mystream;
+        audioRef.current.muted = !isAudioEnabled;
+        audioRef.current.play();
     }
   }, [mystream,isAudioEnabled])
 
@@ -152,11 +179,9 @@ function Room() {
       // console.log(event.streams[0])
       setRemoteStream(remoteStream)
       remoteStream.getTracks().forEach(track => {
-        if (track.kind === "audio") {
-          if (remoteaudioRef.current) {
+          if (track.kind === "audio" && remoteaudioRef.current) {
             remoteaudioRef.current.srcObject = remoteStream;
-            remoteaudioRef.current.play();
-          }
+            remoteaudioRef.current.play()
         }
       });
   }, [])
@@ -167,32 +192,28 @@ const handleVideoToggle=async()=>{
     
         videoTracks.forEach((track)=>{
           track.enabled=!track.enabled
-
-          // socket.emit("videoStatuschange",({
-          //   to:remoteSocketId,
-          //   videoEnabled:track.enabled
-          // }))
-          if (track.enabled) {
-            peerRef.current.addTrack(track, mystream);
-          } else {
-            peerRef.current.removeTrack(track);
-          }
-    
-        })
+          
         setIsVideoEnabled((prev) => !prev)
-        }
+        })
       }
+    }
     
    const handleAudioToggle=()=>{
      if(mystream){
        mystream.getAudioTracks().forEach(track=>{
-         track.enabled=!track.enabled
+         track.enabled=!track.enabled 
          console.log(`Track ID: ${track.id}, Enabled: ${track.enabled}, Muted: ${track.muted}`);
        })
-       setIsAudioEnabled(prev=>!prev)
+      setIsAudioEnabled(prev=>!prev)
      }
    }
-   
+
+   const handleUpdateBadge=useCallback(({id})=>{
+        // console.log(id)
+        if(id === remoteSocketId){
+        setMsgCount(prevcount=>prevcount+1)
+        }
+   },[remoteSocketId])
     
   useEffect(() => {
     initializePeerConnection()
@@ -207,6 +228,11 @@ const handleVideoToggle=async()=>{
     socket.on("callaccepted", handleCallAccepted)
     socket.on("peernegoneeded", handleNegoNeededIncoming)
     socket.on("peernegodone",handlenegofinal)
+    socket.on("call-ended",(remoteSocketId)=>{
+      console.log(`call ended by ${remoteSocketId}`)
+      handlecallendremote()
+    })
+    socket.on("chat-message",handleUpdateBadge)
    
     //cleanup
     return () => {
@@ -215,6 +241,8 @@ const handleVideoToggle=async()=>{
       socket.off("callaccepted", handleCallAccepted)
       socket.off("peernegoneeded", handleNegoNeededIncoming)
       socket.off("peernegodone",handlenegofinal)
+      socket.off("call-ended")
+      socket.off("chat-message",handleUpdateBadge)
     }
   }, [
     socket,
@@ -260,14 +288,19 @@ const handleVideoToggle=async()=>{
           }
           { 
             <IconButton className="msg-btn" onClick={handleToggle}>
-              <MessageIcon style={{ fontSize: "35px", color: "white" }} />
+               {
+                msgcount > 0 ?
+                <Badge badgeContent={msgcount} color="primary">
+                <MessageIcon style={{ fontSize: "35px", color: "white" }} color="action"/>
+              </Badge>:  <MessageIcon style={{ fontSize: "35px", color: "white" }}/>
+              }
             </IconButton>
           }
           {
             <IconButton className="mute-btn" onClick={handleAudioToggle}>
               { isAudioEnabled ? <MicOutlinedIcon style={{ fontSize: "35px", color: "white" }}/>:<MicOffIcon style={{ fontSize: "35px", color: "white" }}/> }
             </IconButton>
-          }
+}
         </div>
         { remotestream && (
           <>
@@ -284,8 +317,9 @@ const handleVideoToggle=async()=>{
              <audio ref={remoteaudioRef} autoPlay/>
           </>
         )}
+         <ToastContainer />
       </div>
-      <Message onClick={(e)=>handleToggle(e)} isopen={isopen}/>
+      <Message onClick={(e)=>handleToggle(e)} isopen={isopen}  setIsOpen={setIsOpen}/>
     </>
   )
 }
