@@ -86,10 +86,10 @@ form {
   .remote-stream{
     margin-top:30px;
     max-width:100%;
-    width:100%;
+    width:100vw;
     object-fit: cover;
     height:100%;
-    left:15%;
+    left:40%;
     top:20%;
   }
   .local-stream.small {
@@ -111,8 +111,8 @@ form {
 }
 .local-stream.small {
   position:absolute;
-  height:35vh; 
-  width:60vw;
+  height:30vh; 
+  width:80vw;
   left:50%;
   top:45%; 
  }
