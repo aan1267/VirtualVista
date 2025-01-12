@@ -3,8 +3,9 @@ import "../style/message.css"
 import Button from "@mui/material/Button"
 import { useSocket } from "../context/SocketProvider"
 import { useUserContext } from '../context/UserProvider'
+import CloseIcon from '@mui/icons-material/Close';
 
-function Message({isopen}) {
+function Message({isopen,setIsOpen}) {
     const [messages,setMessages]=useState([])
     const [input,setInput]=useState("")
     const socket=useSocket()
@@ -12,7 +13,7 @@ function Message({isopen}) {
 
     useEffect(()=>{
       const handleMessage = (msg) => {
-        console.log("Received message:", msg) 
+        console.log("Received message:",msg) 
         setMessages((prevMessages) => [...prevMessages, msg])
     }
 
@@ -22,7 +23,7 @@ function Message({isopen}) {
         }
     },[socket])
 
-  
+   
 
     const handleSubmitForm = useCallback(
       (e) => {
@@ -39,7 +40,10 @@ function Message({isopen}) {
    <>
      {isopen && (
       <div className="chattingRoom">
-      <h1>Chat</h1>
+       <div className="header">
+       <h1>Chat</h1>
+       <Button onClick={()=>setIsOpen(false)}>close <CloseIcon/></Button>
+       </div>
        <div className="messages">
        {messages.map((msg, index) => (
                     <p key={index}>
