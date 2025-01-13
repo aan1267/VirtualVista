@@ -12,6 +12,7 @@ import peerService from "../service/peer"
 import Message from "./Message"
 import { ToastContainer, toast } from 'react-toastify';
 import Badge from '@mui/material/Badge';
+import 'react-toastify/dist/ReactToastify.css'
 
 
 function Room() {
