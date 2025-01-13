@@ -135,20 +135,20 @@ function Room() {
       setRemoteSocketId(null)
   },[mystream,remoteSocketId])
 
-  const handlecallendremote=useCallback(async()=>{
-    if(remotestream){
+  const handlecallendremote=useCallback((remoteSocketId)=>{
+    if(remotestream && remoteSocketId){
       remotestream.getTracks().forEach((track) => track.stop())
-      toast.error("Opponent has disconnected. The call has ended.", {
-        position: "top-center",     
-        hideProgressBar: true, 
-        closeOnClick: true,  
-        pauseOnHover: true,  
-    })
+      console.log("I am close") 
     }
     if (peerRef.current ) {
       peerRef.current.close()
     }
-
+    toast.error("Opponent has disconnected. The call has ended.", {
+      position: "top-center",     
+      hideProgressBar: true, 
+      closeOnClick: true,  
+      pauseOnHover: true, 
+    })
     setRemoteStream(null);
     setRemoteSocketId(null);
       console.log("Redirecting to /lobby...");
@@ -233,7 +233,7 @@ const handleVideoToggle=async()=>{
     socket.on("peernegodone",handlenegofinal)
     socket.on("call-ended",(remoteSocketId)=>{
       console.log(`call ended by ${remoteSocketId}`)
-      handlecallendremote()
+      handlecallendremote(remoteSocketId)
     })
     socket.on("chat-message",handleUpdateBadge)
    
