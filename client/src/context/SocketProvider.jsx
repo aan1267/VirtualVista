@@ -15,9 +15,9 @@ const SocketProvider=() =>{
   //connection create
   const socket=useMemo(()=>io(serverurl),{
     transports: ["websocket"], 
-    pingInterval: 25000,      
-    pingTimeout: 20000,       
-    reconnectionAttempts: 5,   
+    pingInterval: 50000,      
+    pingTimeout: 40000,       
+    reconnectionAttempts: 10,   
     maxPayload: 1000000,      
   },[serverurl])
 
