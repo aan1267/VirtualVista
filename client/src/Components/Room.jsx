@@ -138,6 +138,12 @@ function Room() {
   const handlecallendremote=useCallback(async()=>{
     if(remotestream){
       remotestream.getTracks().forEach((track) => track.stop())
+      toast.error("Opponent has disconnected. The call has ended.", {
+        position: "top-center",     
+        hideProgressBar: true, 
+        closeOnClick: true,  
+        pauseOnHover: true,  
+    })
     }
     if (peerRef.current ) {
       peerRef.current.close()
@@ -145,16 +151,8 @@ function Room() {
 
     setRemoteStream(null);
     setRemoteSocketId(null);
-    setTimeout(()=>{
       console.log("Redirecting to /lobby...");
        navigate("/lobby")
-     },5000)
-      toast.error("Opponent has disconnected. The call has ended.", {
-        position: "top-center",     
-        hideProgressBar: true, 
-        closeOnClick: true,  
-        pauseOnHover: true,  
-    })
 },[remotestream])
 
   
