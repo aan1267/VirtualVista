@@ -6,6 +6,7 @@ import Room from "./Components/Room"
 import SocketProvider from "./context/SocketProvider";
 import { UserProvider } from "./context/UserProvider";
 import LandingPage from './Components/LandingPage';
+import 'react-toastify/dist/ReactToastify.css'
 
 const router = createBrowserRouter([
   {
