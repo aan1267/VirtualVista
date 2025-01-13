@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect,useRef } from "react"
+import {navigate} from "react-router-dom"
 import { IconButton } from "@mui/material"
 import VideocamIcon from "@mui/icons-material/Videocam"
 import CallEndOutlinedIcon from "@mui/icons-material/CallEndOutlined"
@@ -144,7 +145,7 @@ function Room() {
     setRemoteSocketId(null);
     setTimeout(()=>{
       console.log("Redirecting to /lobby...");
-      window.location.href="/lobby"
+      navigate("/lobby")
      },5000)
       toast.error("Opponent has disconnected. The call has ended.", {
         position: "top-center",     
