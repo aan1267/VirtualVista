@@ -142,15 +142,15 @@ function Room() {
     setRemoteStream(null);
     setRemoteSocketId(null);
     setTimeout(()=>{
+      toast.error("Opponent has disconnected. The call has ended.", {
+        position: "top-center", 
+        autoClose:5000,      
+        hideProgressBar: true, 
+        closeOnClick: true,  
+        pauseOnHover: true,  
+      });
       window.location.href="/lobby"
     },5000)
-    toast.error("Opponent has disconnected. The call has ended.", {
-      position: "top-center", 
-      autoClose:5000,      
-      hideProgressBar: true, 
-      closeOnClick: true,  
-      pauseOnHover: true,  
-    });
 },[remotestream])
 
   
