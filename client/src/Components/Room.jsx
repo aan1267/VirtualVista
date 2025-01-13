@@ -119,7 +119,6 @@ function Room() {
   
 
   const handleCallEnd=useCallback(async()=>{
-     await socket.emit("call-ended",remoteSocketId)
       if(mystream){
         mystream.getTracks().forEach((track) => track.stop())
         window.location.href="/"
@@ -127,35 +126,32 @@ function Room() {
     if (peerRef.current ) {
         peerRef.current.close()
       }
-  
+    socket.emit("call-ended",remoteSocketId)
       setMyStream(null)
       setRemoteStream(null)
       setRemoteSocketId(null)
   },[mystream,remoteSocketId])
 
-  const handlecallendremote=useCallback(async(remoteSocketId)=>{
-    try{
-      toast.error("Opponent has disconnected. The call has ended.", {
-        position: "top-center",     
-        hideProgressBar: true, 
-        closeOnClick: true,  
-        pauseOnHover: true, 
-      })
-    }catch(e){
-      console.error(e)
-    }
-    if(remotestream && remoteSocketId){
+  const handlecallendremote=useCallback((remoteSocketId)=>{
+    if(remotestream){
       remotestream.getTracks().forEach((track) => track.stop())
-      console.log("I am close") 
     }
     if (peerRef.current ) {
       peerRef.current.close()
     }
     setRemoteStream(null);
     setRemoteSocketId(null);
+    toast.error("Opponent has disconnected. The call has ended.", {
+      position: "top-center",     
+      hideProgressBar: true, 
+      closeOnClick: true,  
+      pauseOnHover: true, 
+    })
+    setTimeout(()=>{
       console.log("Redirecting to /lobby...");
        navigate("/lobby")
-},[remotestream])
+     },3000)
+},[remotestream,remoteSocketId])
 
   
 
