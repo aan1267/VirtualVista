@@ -12,6 +12,7 @@ import peerService from "../service/peer"
 import Message from "./Message"
 import { ToastContainer, toast } from 'react-toastify';
 import Badge from '@mui/material/Badge';
+import "react-toastify/dist/ReactToastify.css"
 
 
 
@@ -145,8 +146,7 @@ function Room() {
       window.location.href="/lobby"
     },5000)
       toast.error("Opponent has disconnected. The call has ended.", {
-        position: "top-center", 
-        delay: 5000,      
+        position: "top-center",     
         hideProgressBar: true, 
         closeOnClick: true,  
         pauseOnHover: true,  
