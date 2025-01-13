@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect,useRef } from "react"
-import {navigate} from "react-router-dom"
+import {useNavigate} from "react-router-dom"
 import { IconButton } from "@mui/material"
 import VideocamIcon from "@mui/icons-material/Videocam"
 import CallEndOutlinedIcon from "@mui/icons-material/CallEndOutlined"
@@ -25,7 +25,9 @@ function Room() {
   const [isAudioEnabled, setIsAudioEnabled] = useState(true)
   const [isopen,setIsOpen]=useState(false)
   const [msgcount,setMsgCount]=useState(0)
- 
+   
+
+  const navigate=useNavigate()
 
   const socket = useSocket()
   const peerRef= useRef(null)
@@ -133,7 +135,7 @@ function Room() {
       setRemoteSocketId(null)
   },[mystream,remoteSocketId])
 
-  const handlecallendremote=useCallback(()=>{
+  const handlecallendremote=useCallback(async()=>{
     if(remotestream){
       remotestream.getTracks().forEach((track) => track.stop())
     }
@@ -145,7 +147,7 @@ function Room() {
     setRemoteSocketId(null);
     setTimeout(()=>{
       console.log("Redirecting to /lobby...");
-      navigate("/lobby")
+       navigate("/lobby")
      },5000)
       toast.error("Opponent has disconnected. The call has ended.", {
         position: "top-center",     
