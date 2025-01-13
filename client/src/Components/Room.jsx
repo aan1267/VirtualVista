@@ -143,8 +143,9 @@ function Room() {
     setRemoteStream(null);
     setRemoteSocketId(null);
     setTimeout(()=>{
+      console.log("Redirecting to /lobby...");
       window.location.href="/lobby"
-    },5000)
+     },5000)
       toast.error("Opponent has disconnected. The call has ended.", {
         position: "top-center",     
         hideProgressBar: true, 
