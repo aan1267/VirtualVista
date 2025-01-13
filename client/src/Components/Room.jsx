@@ -132,7 +132,7 @@ function Room() {
       setRemoteSocketId(null)
   },[mystream,remoteSocketId])
 
-  const handlecallendremote=useCallback((remoteSocketId)=>{
+  const handlecallendremote=useCallback(async()=>{
     if(remotestream){
       remotestream.getTracks().forEach((track) => track.stop())
     }
@@ -151,7 +151,7 @@ function Room() {
       console.log("Redirecting to /lobby...");
        navigate("/lobby")
      },3000)
-},[remotestream,remoteSocketId])
+},[remotestream])
 
   
 
