@@ -118,6 +118,7 @@ function Room() {
   const handleCallEnd=useCallback(async()=>{
       if(mystream){
         mystream.getTracks().forEach((track) => track.stop())
+        handlecallendremote()
         window.location.href="/"
       }
     if (peerRef.current ) {
@@ -127,7 +128,6 @@ function Room() {
       setMyStream(null)
       setRemoteStream(null)
       setRemoteSocketId(null)
-      handlecallendremote()
   },[mystream,remotestream])
 
    const handlecallendremote=useCallback(async()=>{
@@ -146,7 +146,7 @@ function Room() {
       console.log("Redirecting to /lobby...");
       navigate("/lobby")
      },3000)
- },[remotestream,peerRef,navigate])
+ },[remotestream])
 
   
 
