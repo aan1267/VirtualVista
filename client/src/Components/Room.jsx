@@ -226,7 +226,7 @@ const handleVideoToggle=async()=>{
     socket.on("callaccepted", handleCallAccepted)
     socket.on("peernegoneeded", handleNegoNeededIncoming)
     socket.on("peernegodone",handlenegofinal)
-     socket.on("call-ended",(remoteSocketId)=>{
+    socket.on("call-ended",(remoteSocketId)=>{
        console.log(`call ended by ${remoteSocketId}`)
        handlecallendremote()
      })
@@ -248,6 +248,7 @@ const handleVideoToggle=async()=>{
     handleCallUser,
     handleCallAccepted,
     handleNegoNeeded,
+    handlecallendremote
   ])
 
 
