@@ -129,7 +129,7 @@ function Room() {
       setRemoteStream(null)
       setRemoteSocketId(null)
     window.location.href="/lobby"
-  },[mystream,socket,remoteSocketId])
+  },[mystream])
 
 const handlecallendremote=useCallback(async(remoteSocketId)=>{
     if(remoteSocketId){
@@ -212,17 +212,7 @@ const handleVideoToggle=async()=>{
         }
    },[remoteSocketId])
 
-   useEffect(()=>{
-    socket.on("call-ended",(remoteSocketId)=>{
-      console.log(`call ended by ${remoteSocketId}`)
-      if(remoteSocketId){
-       handlecallendremote(remoteSocketId)
-      }
-    })
-    return ()=>{
-      socket.off("call-ended",handlecallendremote)
-    }
-  },[handlecallendremote,socket])
+
 
     
   useEffect(() => {
@@ -239,6 +229,12 @@ const handleVideoToggle=async()=>{
     socket.on("peernegoneeded", handleNegoNeededIncoming)
     socket.on("peernegodone",handlenegofinal)
     socket.on("chat-message",handleUpdateBadge)
+    socket.on("call-ended",(remoteSocketId)=>{
+      console.log(`call ended by ${remoteSocketId}`)
+      if(remoteSocketId){
+       handlecallendremote(remoteSocketId)
+      }
+    })
    
     //cleanup
     return () => {
@@ -248,6 +244,7 @@ const handleVideoToggle=async()=>{
       socket.off("peernegoneeded", handleNegoNeededIncoming)
       socket.off("peernegodone",handlenegofinal)
       socket.off("chat-message",handleUpdateBadge)
+      socket.off("call-ended")
     }
   }, [
     socket,
