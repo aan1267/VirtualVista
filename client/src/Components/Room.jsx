@@ -248,7 +248,6 @@ const handleVideoToggle=async()=>{
     handleCallUser,
     handleCallAccepted,
     handleNegoNeeded,
-    handlecallendremote,
   ])
 
 
