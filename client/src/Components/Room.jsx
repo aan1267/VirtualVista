@@ -147,6 +147,18 @@ const handlecallendremote=useCallback(async()=>{
       },3000)
   },[remotestream,navigate])
 
+  useEffect(()=>{
+    socket.on("call-ended",(remoteSocketId)=>{
+      console.log(`call ended by ${remoteSocketId}`)
+      if(remoteSocketId){
+       handlecallendremote()
+      }
+    })
+    return ()=>{
+      socket.off("call-ended",handlecallendremote)
+    }
+  },[handlecallendremote,socket])
+
   
 
   useEffect(() => {
@@ -164,7 +176,7 @@ const handlecallendremote=useCallback(async()=>{
     return () => {
         if(peerRef.current){
           peerRef.current.removeEventListener("negotiationneeded", handleNegoNeeded)}
-        }
+    }
     }, [handleNegoNeeded])
 
   const onTrack = useCallback((event) => {
@@ -223,12 +235,6 @@ const handleVideoToggle=async()=>{
     socket.on("callaccepted", handleCallAccepted)
     socket.on("peernegoneeded", handleNegoNeededIncoming)
     socket.on("peernegodone",handlenegofinal)
-    socket.on("call-ended",(remoteSocketId)=>{
-        console.log(`call ended by ${remoteSocketId}`)
-        if(remoteSocketId){
-         handlecallendremote()
-        }
-      })
     socket.on("chat-message",handleUpdateBadge)
    
     //cleanup
@@ -238,7 +244,6 @@ const handleVideoToggle=async()=>{
       socket.off("callaccepted", handleCallAccepted)
       socket.off("peernegoneeded", handleNegoNeededIncoming)
       socket.off("peernegodone",handlenegofinal)
-      socket.off("call-ended")
       socket.off("chat-message",handleUpdateBadge)
     }
   }, [
@@ -247,7 +252,6 @@ const handleVideoToggle=async()=>{
     handleCallUser,
     handleCallAccepted,
     handleNegoNeeded,
-    handlecallendremote
   ])
 
 
