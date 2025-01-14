@@ -127,28 +127,28 @@ function Room() {
       setMyStream(null)
       setRemoteStream(null)
       setRemoteSocketId(null)
-  },[mystream,remoteSocketId])
+  },[mystream,remotestream])
 
-//   const handlecallendremote=useCallback(async()=>{
-//     if(remotestream){
-//       remotestream.getTracks().forEach((track) => track.stop())
-//     }
-//     if (peerRef.current ) {
-//       peerRef.current.close()
-//     }
-//     setRemoteStream(null);
-//     setRemoteSocketId(null);
+   const handlecallendremote=useCallback(async()=>{
+     if(remotestream){
+      remotestream.getTracks().forEach((track) => track.enabled === false)
+    }
+    if (peerRef.current ) {
+      peerRef.current.close()
+    }
+        setRemoteStream(null);
+        setRemoteSocketId(null);
 //     toast.error("Opponent has disconnected. The call has ended.", {
 //       position: "top-center",     
 //       hideProgressBar: true, 
 //       closeOnClick: true,  
 //       pauseOnHover: true, 
 //     })
-//     setTimeout(()=>{
-//       console.log("Redirecting to /lobby...");
-//        navigate("/lobby")
-//      },3000)
-// },[remotestream])
+    setTimeout(()=>{
+      console.log("Redirecting to /lobby...");
+      navigate("/lobby")
+     },3000)
+ },[remotestream,peerRef,navigate])
 
   
 
@@ -226,10 +226,10 @@ const handleVideoToggle=async()=>{
     socket.on("callaccepted", handleCallAccepted)
     socket.on("peernegoneeded", handleNegoNeededIncoming)
     socket.on("peernegodone",handlenegofinal)
-    // socket.on("call-ended",(remoteSocketId)=>{
-    //   console.log(`call ended by ${remoteSocketId}`)
-    //   handlecallendremote()
-    // })
+     socket.on("call-ended",(remoteSocketId)=>{
+       console.log(`call ended by ${remoteSocketId}`)
+       handlecallendremote()
+     })
     socket.on("chat-message",handleUpdateBadge)
    
     //cleanup
@@ -239,7 +239,7 @@ const handleVideoToggle=async()=>{
       socket.off("callaccepted", handleCallAccepted)
       socket.off("peernegoneeded", handleNegoNeededIncoming)
       socket.off("peernegodone",handlenegofinal)
-      // socket.off("call-ended")
+      socket.off("call-ended")
       socket.off("chat-message",handleUpdateBadge)
     }
   }, [
