@@ -131,33 +131,23 @@ function Room() {
     window.location.href="/lobby"
   },[mystream,socket,remoteSocketId])
 
-const handlecallendremote=useCallback(async()=>{
-   if(remotestream){
-       remotestream.getTracks().forEach((track) => track.stop())
-    }
-     if (peerRef.current ) {
-       peerRef.current.close()
+const handlecallendremote=useCallback(async(remoteSocketId)=>{
+    if(remoteSocketId){
+      if(remotestream){
+        remotestream.getTracks().forEach((track) => track.stop())
      }
-      setRemoteStream(null);
-      setRemoteSocketId(null);
-      toast.error("Opponent has disconnected. The call has ended.")
-      setTimeout(()=>{
-       console.log("Redirecting to /lobby...");
-       navigate("/lobby")
-      },3000)
-  },[remotestream,navigate])
-
-  useEffect(()=>{
-    socket.on("call-ended",(remoteSocketId)=>{
-      console.log(`call ended by ${remoteSocketId}`)
-      if(remoteSocketId){
-       handlecallendremote()
+      if (peerRef.current ) {
+        peerRef.current.close()
       }
-    })
-    return ()=>{
-      socket.off("call-ended",handlecallendremote)
+       setRemoteStream(null);
+       setRemoteSocketId(null);
+       toast.error("Opponent has disconnected. The call has ended.")
+       setTimeout(()=>{
+        console.log("Redirecting to /lobby...");
+        navigate("/lobby")
+       },3000)
     }
-  },[handlecallendremote,socket])
+  },[remotestream,navigate,remoteSocketId])
 
   
 
@@ -221,6 +211,19 @@ const handleVideoToggle=async()=>{
         setMsgCount(prevcount=>prevcount+1)
         }
    },[remoteSocketId])
+
+   useEffect(()=>{
+    socket.on("call-ended",(remoteSocketId)=>{
+      console.log(`call ended by ${remoteSocketId}`)
+      if(remoteSocketId){
+       handlecallendremote(remoteSocketId)
+      }
+    })
+    return ()=>{
+      socket.off("call-ended",handlecallendremote)
+    }
+  },[handlecallendremote,socket])
+
     
   useEffect(() => {
     initializePeerConnection()
