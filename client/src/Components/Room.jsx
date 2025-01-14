@@ -118,7 +118,7 @@ function Room() {
   const handleCallEnd=useCallback(async()=>{
       if(mystream){
         mystream.getTracks().forEach((track) => track.stop())
-        handlecallendremote()
+        handlecallendremote(remotestream,peerRef.current)
         window.location.href="/"
       }
     if (peerRef.current ) {
@@ -128,9 +128,9 @@ function Room() {
       setMyStream(null)
       setRemoteStream(null)
       setRemoteSocketId(null)
-  },[mystream,remotestream])
+  },[mystream,remotestream,peerRef])
 
-   const handlecallendremote=useCallback(async()=>{
+   const handlecallendremote=useCallback(async(remotestream)=>{
      if(remotestream){
       remotestream.getTracks().forEach((track) => track.stop())
     }
