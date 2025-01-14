@@ -123,15 +123,16 @@ function Room() {
     if (peerRef.current ) {
         peerRef.current.close()
       }
-    socket.emit("call-ended",remoteSocketId)
+    // socket.emit("call-ended",remoteSocketId)
       setMyStream(null)
       setRemoteStream(null)
       setRemoteSocketId(null)
+      handlecallendremote()
   },[mystream,remotestream])
 
    const handlecallendremote=useCallback(async()=>{
      if(remotestream){
-      remotestream.getTracks().forEach((track) => track.enabled = false)
+      remotestream.getTracks().forEach((track) => track.stop())
     }
     if (peerRef.current ) {
       peerRef.current.close()
@@ -223,12 +224,12 @@ const handleVideoToggle=async()=>{
     socket.on("callaccepted", handleCallAccepted)
     socket.on("peernegoneeded", handleNegoNeededIncoming)
     socket.on("peernegodone",handlenegofinal)
-    socket.on("call-ended",(remoteSocketId)=>{
-       console.log(`call ended by ${remoteSocketId}`)
-       if(remoteSocketId){
-        handlecallendremote()
-       }
-     })
+    // socket.on("call-ended",(remoteSocketId)=>{
+    //    console.log(`call ended by ${remoteSocketId}`)
+    //    if(remoteSocketId){
+    //     handlecallendremote()
+    //    }
+    //  })
     socket.on("chat-message",handleUpdateBadge)
    
     //cleanup
@@ -238,7 +239,7 @@ const handleVideoToggle=async()=>{
       socket.off("callaccepted", handleCallAccepted)
       socket.off("peernegoneeded", handleNegoNeededIncoming)
       socket.off("peernegodone",handlenegofinal)
-      socket.off("call-ended")
+      // socket.off("call-ended")
       socket.off("chat-message",handleUpdateBadge)
     }
   }, [
