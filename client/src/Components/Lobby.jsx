@@ -27,8 +27,6 @@ function Lobby() {
       // console.log(data)
       console.log(username, room)
       navigate(`/room/${room}`)
-      setUsername(""),
-      setRoom("")
     },
     [navigate]
   );
