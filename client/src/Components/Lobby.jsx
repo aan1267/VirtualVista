@@ -20,12 +20,15 @@ function Lobby() {
     [username, room, socket]
   )
 
+
   const handleJoinRoom = useCallback(
     (data) => {
       const { username, room } = data
       // console.log(data)
       console.log(username, room)
       navigate(`/room/${room}`)
+      setUsername(""),
+      setRoom("")
     },
     [navigate]
   );
