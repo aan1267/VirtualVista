@@ -118,17 +118,16 @@ function Room() {
   const handleCallEnd=useCallback(async()=>{
       if(mystream){
         mystream.getTracks().forEach((track) => track.stop())
-        handlecallendremote(remotestream,peerRef.current)
         window.location.href="/"
       }
     if (peerRef.current ) {
         peerRef.current.close()
       }
-    // socket.emit("call-ended",remoteSocketId)
+    socket.emit("call-ended",remoteSocketId)
       setMyStream(null)
       setRemoteStream(null)
       setRemoteSocketId(null)
-  },[mystream,remotestream,peerRef])
+  },[mystream])
 
    const handlecallendremote=useCallback(async(remotestream)=>{
      if(remotestream){
@@ -139,9 +138,7 @@ function Room() {
     }
         setRemoteStream(null);
         setRemoteSocketId(null);
-    toast.error("Opponent has disconnected. The call has ended.",
-      {position:top-center}
-    )
+    toast.error("Opponent has disconnected. The call has ended.")
     setTimeout(()=>{
       console.log("Redirecting to /lobby...");
       navigate("/lobby")
@@ -224,12 +221,12 @@ const handleVideoToggle=async()=>{
     socket.on("callaccepted", handleCallAccepted)
     socket.on("peernegoneeded", handleNegoNeededIncoming)
     socket.on("peernegodone",handlenegofinal)
-    // socket.on("call-ended",(remoteSocketId)=>{
-    //    console.log(`call ended by ${remoteSocketId}`)
-    //    if(remoteSocketId){
-    //     handlecallendremote()
-    //    }
-    //  })
+    socket.on("call-ended",(remoteSocketId)=>{
+        console.log(`call ended by ${remoteSocketId}`)
+        if(remoteSocketId){
+         handlecallendremote()
+        }
+      })
     socket.on("chat-message",handleUpdateBadge)
    
     //cleanup
@@ -239,7 +236,7 @@ const handleVideoToggle=async()=>{
       socket.off("callaccepted", handleCallAccepted)
       socket.off("peernegoneeded", handleNegoNeededIncoming)
       socket.off("peernegodone",handlenegofinal)
-      // socket.off("call-ended")
+      socket.off("call-ended")
       socket.off("chat-message",handleUpdateBadge)
     }
   }, [
