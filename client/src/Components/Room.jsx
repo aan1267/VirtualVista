@@ -119,38 +119,33 @@ function Room() {
       if(mystream){
         mystream.getTracks().forEach((track) => track.stop())
       }
-
-      if (remotestream) {
-        remotestream.getTracks().forEach((track) => track.stop())
-        toast.error("Opponent has disconnected. The call has ended.")
-      }
-
-       window.location.href="/lobby"
-    
-    if (peerRef.current ) {
+      if (peerRef.current ) {
         peerRef.current.close()
       }
-    // socket.emit("call-ended",remoteSocketId)
+     if(remoteSocketId){
+      socket.emit("call-ended",remoteSocketId)
+     }
       setMyStream(null)
       setRemoteStream(null)
       setRemoteSocketId(null)
-  },[mystream,remotestream])
+    window.location.href="/lobby"
+  },[mystream,socket,remoteSocketId])
 
-//    const handlecallendremote=useCallback(async(remotestream)=>{
-//      if(remotestream){
-//       remotestream.getTracks().forEach((track) => track.stop())
-//     }
-//     if (peerRef.current ) {
-//       peerRef.current.close()
-//     }
-//         setRemoteStream(null);
-//         setRemoteSocketId(null);
-//     toast.error("Opponent has disconnected. The call has ended.")
-//     setTimeout(()=>{
-//       console.log("Redirecting to /lobby...");
-//       navigate("/lobby")
-//      },3000)
-//  },[remotestream])
+const handlecallendremote=useCallback(async()=>{
+   if(remotestream){
+       remotestream.getTracks().forEach((track) => track.stop())
+    }
+     if (peerRef.current ) {
+       peerRef.current.close()
+     }
+      setRemoteStream(null);
+      setRemoteSocketId(null);
+      toast.error("Opponent has disconnected. The call has ended.")
+      setTimeout(()=>{
+       console.log("Redirecting to /lobby...");
+       navigate("/lobby")
+      },3000)
+  },[remotestream,navigate])
 
   
 
@@ -252,6 +247,7 @@ const handleVideoToggle=async()=>{
     handleCallUser,
     handleCallAccepted,
     handleNegoNeeded,
+    handlecallendremote
   ])
 
 
