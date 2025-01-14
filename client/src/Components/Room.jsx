@@ -122,63 +122,40 @@ function Room() {
       if (peerRef.current ) {
         peerRef.current.close()
       }
-     if(remoteSocketId){
       socket.emit("call-ended",remoteSocketId)
-     }
       setMyStream(null)
       setRemoteStream(null)
       setRemoteSocketId(null)
-    window.location.href="/lobby"
+      navigate("/")
   },[mystream])
 
-// const handlecallendremote=useCallback(async(remoteSocketId)=>{
-//     if(remoteSocketId){
-//       if(remotestream){
-//         remotestream.getTracks().forEach((track) => track.stop())
-//      }
-//       if (peerRef.current ) {
-//         peerRef.current.close()
-//       }
-//        setRemoteStream(null);
-//        setRemoteSocketId(null);
-//        toast.error("Opponent has disconnected. The call has ended.")
-//        setTimeout(()=>{
-//         console.log("Redirecting to /lobby...");
-//         navigate("/lobby")
-//        },3000)
-//     }
-//   },[remotestream,navigate,remoteSocketId])
-
-  useEffect(() => {
-    const handleRemoteCallEnd = (remoteSocketId) => {
-      if (remotestream) {
-        remotestream.getTracks().forEach((track) => track.stop());
+const handlecallendremote=useCallback(async(remoteSocketId)=>{
+    if(remoteSocketId){
+      if(remotestream){
+        remotestream.getTracks().forEach((track) => track.stop())
+     }
+      if (peerRef.current ) {
+        peerRef.current.close()
       }
-      if (peerRef.current) {
-        peerRef.current.close();
-      }
-      setRemoteStream(null);
-      setRemoteSocketId(null);
-      toast.error("Opponent has disconnected. The call has ended.");
-      
-      // Redirect after a short delay (3 seconds)
-      setTimeout(() => {
+       setRemoteStream(null);
+       setRemoteSocketId(null);
+       toast.error("Opponent has disconnected. The call has ended.")
+       setTimeout(()=>{
         console.log("Redirecting to /lobby...");
-        navigate("/lobby");
-      }, 3000);
-    };
-  
-    // Listen for "call-ended" event from the server
-    socket.on("call-ended", handleRemoteCallEnd);
-  
-    // Cleanup the socket listener
-    return () => {
-      socket.off("call-ended", handleRemoteCallEnd);
-    };
-  }, [remotestream, socket, navigate]);
-  
-  
-  useEffect(() => {
+        navigate("/")
+       },5000)
+    }
+  },[remotestream,navigate,remoteSocketId])
+
+  useEffect(()=>{
+    socket.on("call-ended",handlecallendremote)
+
+    return()=>{
+      socket.off("call-ended",handlecallendremote)
+    }
+  },[])
+
+ useEffect(() => {
     if (mystream && audioRef.current) {
         audioRef.current.srcObject = mystream;
         audioRef.current.muted = !isAudioEnabled;
@@ -186,7 +163,7 @@ function Room() {
     }
   }, [mystream,isAudioEnabled])
 
-   useEffect(() => {
+useEffect(() => {
    if(peerRef.current){
     peerRef.current.addEventListener("negotiationneeded", handleNegoNeeded)
    }
@@ -233,7 +210,7 @@ const handleVideoToggle=async()=>{
    }
 
    const handleUpdateBadge=useCallback(({id})=>{
-        // console.log(id)
+         console.log(id)
         if(id === remoteSocketId){
         setMsgCount(prevcount=>prevcount+1)
         }
@@ -253,6 +230,7 @@ const handleVideoToggle=async()=>{
     socket.on("userjoined", handleUserJoined)
     socket.on("incomingcall", handleIncomingCall)
     socket.on("callaccepted", handleCallAccepted)
+    // socket.on("call-ended",handlecallendremote)
     socket.on("peernegoneeded", handleNegoNeededIncoming)
     socket.on("peernegodone",handlenegofinal)
     socket.on("chat-message",handleUpdateBadge)
