@@ -11,15 +11,15 @@ import "../style/room.css"
 import { useSocket } from "../context/SocketProvider"
 import peerService from "../service/peer"
 import Message from "./Message"
-import { ToastContainer, toast } from 'react-toastify';
-import Badge from '@mui/material/Badge';
+import { ToastContainer, toast } from 'react-toastify'
+import Badge from '@mui/material/Badge'
 
 
 
 function Room() {
   const [remoteSocketId, setRemoteSocketId] = useState(null)
-  const [mystream, setMyStream] = useState()
-  const [remotestream, setRemoteStream] = useState()
+  const [mystream, setMyStream] = useState(null)
+  const [remotestream, setRemoteStream] = useState(null)
   const [isVideoEnabled, setIsVideoEnabled] = useState(true)
   const [isAudioEnabled, setIsAudioEnabled] = useState(true)
   const [isopen,setIsOpen]=useState(false)
@@ -35,6 +35,9 @@ function Room() {
   const handleToggle = (e)=>{
        e.stopPropagation()
        setIsOpen(!isopen)
+       if(isopen){
+        setMsgCount(0)
+       }
   }
 
   const initializePeerConnection = () => {
@@ -45,6 +48,8 @@ function Room() {
       peerRef.current.addEventListener("negotiationneeded", handleNegoNeeded)
      }
   }
+
+ 
 
   const requestPermissions = async () => {
       try {
@@ -117,7 +122,11 @@ function Room() {
 
   const handleCallEnd=useCallback(async()=>{
       if(mystream){
-        mystream.getTracks().forEach((track) => track.stop())
+        mystream.getTracks().forEach(track => track.stop())
+      }
+
+      if(remotestream){
+        remotestream.getTracks().forEach(track =>  track.stop())
       }
       if (peerRef.current ) {
         peerRef.current.close()
@@ -126,10 +135,11 @@ function Room() {
       setMyStream(null)
       setRemoteStream(null)
       setRemoteSocketId(null)
-      navigate("/")
-  },[mystream])
+        navigate("/")
+        window.location.reload()
+  },[mystream,remotestream,socket,remoteSocketId])
 
-const handlecallendremote=useCallback(async(remoteSocketId)=>{
+  const handlecallendremote=useCallback(async(remoteSocketId)=>{
     if(remoteSocketId){
       if(remotestream){
         remotestream.getTracks().forEach((track) => track.stop())
@@ -137,41 +147,16 @@ const handlecallendremote=useCallback(async(remoteSocketId)=>{
       if (peerRef.current ) {
         peerRef.current.close()
       }
-       setRemoteStream(null);
-       setRemoteSocketId(null);
+       setRemoteStream(null)
+       setRemoteSocketId(null)
        toast.error("Opponent has disconnected. The call has ended.")
        setTimeout(()=>{
-        console.log("Redirecting to /lobby...");
         navigate("/")
        },5000)
+       window.location.reload()
     }
   },[remotestream,navigate,remoteSocketId])
 
-  useEffect(()=>{
-    socket.on("call-ended",handlecallendremote)
-
-    return()=>{
-      socket.off("call-ended",handlecallendremote)
-    }
-  },[])
-
- useEffect(() => {
-    if (mystream && audioRef.current) {
-        audioRef.current.srcObject = mystream;
-        audioRef.current.muted = !isAudioEnabled;
-        audioRef.current.play();
-    }
-  }, [mystream,isAudioEnabled])
-
-useEffect(() => {
-   if(peerRef.current){
-    peerRef.current.addEventListener("negotiationneeded", handleNegoNeeded)
-   }
-    return () => {
-        if(peerRef.current){
-          peerRef.current.removeEventListener("negotiationneeded", handleNegoNeeded)}
-    }
-    }, [handleNegoNeeded])
 
   const onTrack = useCallback((event) => {
     console.log("Got remote track:", event.track.kind)
@@ -187,7 +172,7 @@ useEffect(() => {
       });
   }, [])
 
-const handleVideoToggle=async()=>{
+  const handleVideoToggle=async()=>{
       if (mystream ){
         const videoTracks = mystream.getVideoTracks()
     
@@ -199,7 +184,7 @@ const handleVideoToggle=async()=>{
       }
     }
     
-   const handleAudioToggle=()=>{
+  const handleAudioToggle=()=>{
      if(mystream){
        mystream.getAudioTracks().forEach(track=>{
          track.enabled=!track.enabled 
@@ -207,33 +192,57 @@ const handleVideoToggle=async()=>{
        })
       setIsAudioEnabled(prev=>!prev)
      }
-   }
+  }
 
-   const handleUpdateBadge=useCallback(({id})=>{
+  const getNotification=useCallback(({id})=>{
          console.log(id)
         if(id === remoteSocketId){
         setMsgCount(prevcount=>prevcount+1)
         }
-   },[remoteSocketId])
+  },[remoteSocketId,isopen])
 
 
+  useEffect(()=>{
+    socket.on("call-ended",handlecallendremote)
 
-    
+    return()=>{
+      socket.off("call-ended",handlecallendremote)
+    }
+  },[handlecallendremote,socket])
+
+  useEffect(() => {
+    if (mystream && audioRef.current) {
+        audioRef.current.srcObject = mystream;
+        audioRef.current.muted = !isAudioEnabled;
+        audioRef.current.play();
+    }
+  }, [mystream,isAudioEnabled])
+
+  useEffect(() => {
+   if(peerRef.current){
+    peerRef.current.addEventListener("negotiationneeded", handleNegoNeeded)
+   }
+    return () => {
+        if(peerRef.current){
+          peerRef.current.removeEventListener("negotiationneeded", handleNegoNeeded)}
+    }
+  }, [handleNegoNeeded])
+
+  
   useEffect(() => {
     initializePeerConnection()
     const initStream = async () => {
         await requestPermissions()
-      }
+  }
     
-    initStream()
+  initStream()
 
     socket.on("userjoined", handleUserJoined)
     socket.on("incomingcall", handleIncomingCall)
     socket.on("callaccepted", handleCallAccepted)
-    // socket.on("call-ended",handlecallendremote)
     socket.on("peernegoneeded", handleNegoNeededIncoming)
     socket.on("peernegodone",handlenegofinal)
-    socket.on("chat-message",handleUpdateBadge)
+    socket.on("chat-message",getNotification)
    
     //cleanup
     return () => {
@@ -242,7 +251,7 @@ const handleVideoToggle=async()=>{
       socket.off("callaccepted", handleCallAccepted)
       socket.off("peernegoneeded", handleNegoNeededIncoming)
       socket.off("peernegodone",handlenegofinal)
-      socket.off("chat-message",handleUpdateBadge)
+      socket.off("chat-message",getNotification)
     }
   }, [
     socket,
@@ -251,7 +260,6 @@ const handleVideoToggle=async()=>{
     handleCallAccepted,
     handleNegoNeeded,
   ])
-
 
 
 
@@ -292,7 +300,7 @@ const handleVideoToggle=async()=>{
                 msgcount > 0 ?
                 <Badge badgeContent={msgcount} color="primary">
                 <MessageIcon style={{ fontSize: "35px", color: "white" }} color="action"/>
-              </Badge>:  <MessageIcon style={{ fontSize: "35px", color: "white" }}/>
+              </Badge> : <MessageIcon style={{ fontSize: "35px", color: "white" }}/>
               }
             </IconButton>
           }
