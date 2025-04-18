@@ -128,6 +128,7 @@ function Room() {
       if(remotestream){
         remotestream.getTracks().forEach(track =>  track.stop())
       }
+
       if (peerRef.current ) {
         peerRef.current.close()
       }
@@ -135,27 +136,9 @@ function Room() {
       setMyStream(null)
       setRemoteStream(null)
       setRemoteSocketId(null)
-        navigate("/")
-        window.location.reload()
+      navigate("/")
+      window.location.reload()
   },[mystream,remotestream,socket,remoteSocketId])
-
-  const handlecallendremote=useCallback(async(remoteSocketId)=>{
-    if(remoteSocketId){
-      if(remotestream){
-        remotestream.getTracks().forEach((track) => track.stop())
-     }
-      if (peerRef.current ) {
-        peerRef.current.close()
-      }
-       setRemoteStream(null)
-       setRemoteSocketId(null)
-       toast.error("Opponent has disconnected. The call has ended.")
-       setTimeout(()=>{
-        navigate("/")
-       },5000)
-       window.location.reload()
-    }
-  },[remotestream,navigate,remoteSocketId])
 
 
   const onTrack = useCallback((event) => {
@@ -203,12 +186,12 @@ function Room() {
 
 
   useEffect(()=>{
-    socket.on("call-ended",handlecallendremote)
+    socket.on("call-ended",handleCallEnd)
 
     return()=>{
-      socket.off("call-ended",handlecallendremote)
+      socket.off("call-ended",handleCallEnd)
     }
-  },[handlecallendremote,socket])
+  },[handleCallEnd,socket])
 
   useEffect(() => {
     if (mystream && audioRef.current) {
